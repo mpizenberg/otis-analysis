@@ -1,10 +1,10 @@
-function file_path = imgPath ( resources_path, category_id )
+function file_path = imgPath ( resources_path, categories, id )
 % Retrieve the file path of the raw image based on its id
 % and the root resources directory
 %
 % Syntax #####################
 %
-% img_path = Resources.Scribbles.imgPath( '/home/me/resources', 6 );
+% img_path = Resources.Scribbles.imgPath( '/home/me/resources', categories, 6 );
 % -> '/home/me/resources/img/gymnast/03.jpg'
 
 
@@ -12,7 +12,7 @@ function file_path = imgPath ( resources_path, category_id )
 file_path = fullfile ...
 	( resources_path ...
 	, 'img' ...
-	, Resources.categoryName( category_id ) ...
+	, categories{ id } ...
 	, '03.jpg' ...
 	);
 

@@ -1,22 +1,24 @@
-function gts = allGtMasks ( resources_path )
+function gts = allGtMasks ( resources_path, categories )
 % Load all Outline ground truth masks.
 %
 % Syntax #####################
 %
-% gts = Resources.Outline.allGtMasks( resources_path );
+% gts = Resources.Outline.allGtMasks( resources_path, categories );
 %
 % Description ################
 %
 % resources_path: String. The path of the resources directory.
-% gts: 1 x 11 cell array. Each containing a ground truth mask.
+% categories: 1 x nb_categories cell array of Strings.
+% gts: 1 x nb_categories cell array. Each containing a ground truth mask.
 
 
 % Anonymous function to load one ground truth mask.
-gt_read = @(id) Resources.Outline.gtMask( resources_path, id );
+gt_read = @(id) imread( Resources.Outline.gtPath( resources_path, categories, id ) );
 
 
 % Actual ground truths loaded.
-gts = arrayfun( gt_read, 1:11, 'UniformOutput', false );
+nb_categories = length( categories );
+gts = arrayfun( gt_read, 1:nb_categories, 'UniformOutput', false );
 
 
 end

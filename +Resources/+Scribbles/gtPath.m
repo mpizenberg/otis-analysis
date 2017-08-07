@@ -1,10 +1,10 @@
-function file_path = gtPath ( resources_path, category_id )
+function file_path = gtPath ( resources_path, categories, id )
 % Retrieve the file path of the ground truth mask based on its id
 % and the root resources directory.
 %
 % Syntax #####################
 %
-% gt_path = Resources.Scribbles.gtPath( '/home/me/resources', 6 );
+% gt_path = Resources.Scribbles.gtPath( '/home/me/resources', categories, 6 );
 % -> '/home/me/resources/groundtruth/gymnast/03.png'
 
 
@@ -12,7 +12,7 @@ function file_path = gtPath ( resources_path, category_id )
 file_path = fullfile ...
 	( resources_path ...
 	, 'groundtruth' ...
-	, Resources.categoryName( category_id ) ...
+	, categories{ id } ...
 	, '03.png' ...
 	);
 

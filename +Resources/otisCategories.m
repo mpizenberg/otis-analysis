@@ -1,10 +1,10 @@
-function name = categoryName ( category_id )
-% Retrieve the name of the image category (balloon, ...) with its id.
+function categories = otisCategories
+% Default 11 otis categories.
 %
 % Syntax #####################
 %
-% name = Resources.categoryName( 1 );
-% -> 'balloon'
+% categories = Resources.otisCategories;
+% -> { 'balloon', ..., 'taj_mahal' }
 
 
 % The categories
@@ -21,10 +21,6 @@ categories = ...
 	, 'statue_of_liberty' ...
 	, 'taj_mahal' ...
 	};
-
-
-% The name
-name = categories{ category_id };
 
 
 end
