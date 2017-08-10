@@ -1,0 +1,3 @@
+[submodule "+Utils/textprogressbar"]
+	path = +Utils/textprogressbar
+	url = https://github.com/megasthenis/textprogressbar.git
