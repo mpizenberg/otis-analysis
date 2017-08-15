@@ -6,7 +6,7 @@ methods (Static)
 
 function img = default ( skeleton, bg_img )
 % Draw skeleton points with default green small disks.
-	img = View.Skeleton.points( skeleton, bg_img, 1, 'green' );
+	img = View.Skeleton.points( skeleton, bg_img, 2, 'green' );
 end
 
 
