@@ -47,7 +47,7 @@ end % private methods
 methods (Static)
 
 
-function duration( users, file_path )
+function duration ( users, file_path )
 % Plot Figure 10.
 % users must be an horizontal cell array. { user1, ..., usern }.
 	durations_rectangle = Utils.mycellfun ...
@@ -75,7 +75,7 @@ function duration( users, file_path )
 end
 
 
-function errors( users, file_path )
+function errors ( users, file_path )
 % Plot Figure 11.
 	errors_rectangle = Utils.mycellfun ...
 		( @(user) User.Data.Errors.allSelections( user.data.rectangle ) ...
@@ -96,6 +96,21 @@ function errors( users, file_path )
 	labels = { 'Bounding box', 'Outline', 'Scribbles' };
 	x_label = 'Number of wrong attempts for all 11 images (lower is better)';
 	x_axis = [ 0, 15 ];
+	fig_size = [ 600, 200 ];
+	fig_handle = Paper.Plots.box( quantiles, labels, x_label, x_axis, fig_size );
+	Paper.Plots.savePdf( fig_handle, file_path );
+end
+
+
+function precisionBG ( users, file_path )
+% Plot Figure 12.
+	precision_rectangle = ...
+	precision_outline = ...
+	precision_scribbles = ...
+	quantiles = ...
+	labels = { 'Scribbles with superpixels', 'Bounding box', 'Outline' };
+	x_label = 'Precision of background user input';
+	x_axis = [ 0.6, 1 ];
 	fig_size = [ 600, 200 ];
 	fig_handle = Paper.Plots.box( quantiles, labels, x_label, x_axis, fig_size );
 	Paper.Plots.savePdf( fig_handle, file_path );

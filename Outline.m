@@ -38,6 +38,24 @@ function mask = bgMask ( outline, mask_size )
 end
 
 
+function mask = fgEroded ( outline, radius, mask_size )
+% Compute the eroded foreground mask of an outline.
+	fg = Outline.fgMask( outline, mask_size );
+	mask = imerode( fg, strel( 'disk', radius, 8 ) );
+end
+
+
+function mask = fgErodedSP ( outline, radius, superpixels )
+% Compute the eroded foreground mask of an outline.
+% Extend with superpixels.
+	mask_size = size( superpixels );
+	fg_eroded = Outline.fgEroded( outline, radius, mask_size );
+	[ sp_ids, ~ ] = SP.fromMask( superpixels, fg_eroded );
+	fg_mask = Outline.fgMask( outline, mask_size );
+	mask = SP.constrainedMask( superpixels, sp_ids, fg_mask );
+end
+
+
 function max_radius = maxRadius ( outline )
 % Compute the max radius of inner medial axis circles.
 	[ ~, radius, ~ ] = Utils.medialaxis( transpose( outline ) );
@@ -65,6 +83,23 @@ function skel = skeleton ( outline, radius_threshold )
 % skel: 2 x M array. The skeleton points.
 	[ centers, radius, ~ ] = Utils.medialaxis( transpose( outline ) );
 	skel = centers( :, radius >= radius_threshold );
+end
+
+
+function mask = skeletonMask ( outline, radius_threshold, mask_size )
+% Compute the skeleton and transform it into a binary mask.
+	skeleton_sub = round( Outline.skeleton( outline, radius_threshold ) );
+	mask = Utils.sub2mask( mask_size, skeleton_sub(2,:), skeleton_sub(1,:) );
+end
+
+
+function mask = skeletonSP ( outline, radius_threshold, superpixels )
+% Compute the skeleton of an outline and extend with superpixels.
+	skeleton = Outline.skeleton( outline, radius_threshold );
+	[ sp_ids, ~ ] = SP.fromSub( ...
+		superpixels, round(skeleton(2,:)), round(skeleton(1,:)) );
+	fg_mask = Outline.fgMask( outline, size(superpixels) );
+	mask = SP.constrainedMask( superpixels, sp_ids, fg_mask );
 end
 
 
@@ -132,6 +167,14 @@ function outline_profile = profile ( outline, gt )
 	% improfile might generate very few NaN values (near the border)
 	% So for now I will just filter out those values.
 	outline_profile = outline_profile( ~( isnan( outline_profile ) ) );
+end
+
+
+function gs_radius = goldStandardRadius ( outline, gt )
+	profile = Outline.profile( outline, gt );
+	profile_mean = mean( profile );
+	profile_std = std( profile );
+	gs_radius = profile_mean + 2 * profile_std;
 end
 
 

@@ -11,15 +11,6 @@ end % constant properties
 methods (Static, Access=private)
 
 
-function eroded_mask = erodedMask( outline, mask_size )
-% Compute the eroded mask from an outline.
-	fg_mask = Outline.fgMask( outline, mask_size );
-	max_radius = Outline.maxRadius( outline );
-	erosion_disk = strel( 'disk', round( max_radius/2 ), 8 );
-	eroded_mask = imerode( fg_mask, erosion_disk );
-end
-
-
 function img = coloredLayers( gt, fg_mask, outline, colormap )
 % Generate an image, using different colors for
 % the ground truth mask, some foreground mask, and the outline.
@@ -27,17 +18,6 @@ function img = coloredLayers( gt, fg_mask, outline, colormap )
 	labels( fg_mask ) = 2;
 	img = ind2rgb( labels, colormap );
 	img = View.Outline.points( outline, img, 2, colormap(4,:) );
-end
-
-
-function sp_mask = extendFrom( SP_ids, outline, mask_size, superpixels )
-% Generate the mask obtained from some foreground superpixels indexes.
-% Remove superpixels also belonging to the background.
-	bg_mask = Outline.bgMask( outline, mask_size );
-	[ SP_bg, ~ ] = SP.fromMask( superpixels, bg_mask );
-	SP_conflicts = intersect( SP_ids, SP_bg );
-	SP_ids = setdiff( SP_ids, SP_conflicts );
-	sp_mask = SP.toMask( superpixels, SP_ids );
 end
 
 
@@ -74,7 +54,8 @@ methods (Static)
 
 function img = fgErosion ( gt, outline )
 % Figure 4 a.
-	eroded_mask = Paper.Figures.erodedMask( outline, size(gt) );
+	max_radius = Outline.maxRadius( outline );
+	eroded_mask = Outline.fgEroded( outline, round(max_radius/2), size(gt) );
 	img = Paper.Figures.coloredLayers( ...
 		gt, eroded_mask, outline, Paper.Figures.colormap );
 end
@@ -82,10 +63,8 @@ end
 
 function img = fgErosionSP ( gt, outline, superpixels )
 % Figure 4 c.
-	eroded_mask = Paper.Figures.erodedMask( outline, size(gt) );
-	[ SP_erosion, ~ ] = SP.fromMask( superpixels, eroded_mask );
-	eroded_sp_mask = Paper.Figures.extendFrom( ...
-		SP_erosion, outline, size(gt), superpixels );
+	max_radius = Outline.maxRadius( outline );
+	eroded_sp_mask = Outline.fgErodedSP( outline, round(max_radius/2), superpixels );
 	img = Paper.Figures.coloredLayers( ...
 		gt, eroded_sp_mask, outline, Paper.Figures.colormap );
 end
@@ -105,11 +84,8 @@ end
 function img = fgSkeletonSP ( gt, outline, superpixels )
 % Figure 4 d.
 	max_radius = Outline.maxRadius( outline );
-	skeleton = Outline.skeleton( outline, 0.5*max_radius );
-	[ SP_skel, ~ ] = SP.fromSub( ...
-		superpixels, round(skeleton(2,:)), round(skeleton(1,:)) );
-	skeleton_sp_mask = Paper.Figures.extendFrom( ...
-		SP_skel, outline, size(gt), superpixels );
+	skeleton_sp_mask = Outline.skeletonSP( ...
+		outline, 0.5*max_radius, superpixels );
 	img = Paper.Figures.coloredLayers( ...
 		gt, skeleton_sp_mask, outline, Paper.Figures.colormap );
 end
