@@ -5,6 +5,7 @@ methods (Static, Access=private)
 
 
 function fig_handle = box ( all_quantiles, labels, x_label, x_axis, fig_size )
+% Make a box plot with consistent configuration parameters.
 	% Transform quantiles [0, 0.25, 0.5, 0.75, 1] to a vector usable by "boxplot".
 	% The trick to be able to use boxplot is to add the median once.
 	plotable_quantiles = cellfun ...
@@ -31,6 +32,7 @@ end
 
 
 function savePdf ( fig_handle, file_path )
+% Save the given figure into a pdf file.
 	pos = get( fig_handle, 'Position' );
 	set( fig_handle ...
 		, 'PaperPositionMode', 'Auto' ...
@@ -42,12 +44,16 @@ end
 
 
 function results = evalMethod ( method, varargin )
+% Group [ precision, recall, and jaccard ] of an evaluation method
+% into one struct having the .precision, .recall and .jaccard fields.
 	results = struct;
 	[ results.precisions, results.recalls, results.jaccards ] = method( varargin{:} );
 end
 
 
 function [ p, r, j ] = evalAllUsers ( users, method, varargin )
+% Evaluate one method over all given users.
+% Regroup precision, recall and jaccard results into distinct variables.
 	all_results = Utils.mycellfun ...
 		( @(user) Paper.Plots.evalMethod( method, user, varargin{:} ), users );
 	p = cell2mat( Utils.mycellfun( @(results) results.precisions, all_results ) );
