@@ -1,7 +1,7 @@
 classdef (Abstract) Scribbles
 % Manipulation of scribbles annotations.
-% In all these functions, the first `scribbles` argument
-% is an N x 2 array coming from json annotations.
+% In all these functions, the first `visible_scribbles` argument
+% is cell array containing each visible scribble coming from json annotations.
 
 
 methods (Static)
