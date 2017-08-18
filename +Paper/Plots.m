@@ -41,6 +41,21 @@ function savePdf ( fig_handle, file_path )
 end
 
 
+function results = evalMethod ( method, varargin )
+	results = struct;
+	[ results.precisions, results.recalls, results.jaccards ] = method( varargin{:} );
+end
+
+
+function [ p, r, j ] = evalAllUsers ( users, method, varargin )
+	all_results = Utils.mycellfun ...
+		( @(user) Paper.Plots.evalMethod( method, user, varargin{:} ), users );
+	p = cell2mat( Utils.mycellfun( @(results) results.precisions, all_results ) );
+	r = cell2mat( Utils.mycellfun( @(results) results.recalls, all_results ) );
+	j = cell2mat( Utils.mycellfun( @(results) results.jaccards, all_results ) );
+end
+
+
 end % private methods
 
 
@@ -101,20 +116,6 @@ function errors ( users, file_path )
 	fig_handle = Paper.Plots.box( quantiles, labels, x_label, x_axis, fig_size );
 	Paper.Plots.savePdf( fig_handle, file_path );
 	close all;
-end
-
-
-function results = evalMethod ( method, varargin )
-	results = struct;
-	[ results.precisions, results.recalls, results.jaccards ] = method( varargin{:} );
-end
-
-function [ p, r, j ] = evalAllUsers ( users, method, varargin )
-	all_results = Utils.mycellfun ...
-		( @(user) Paper.Plots.evalMethod( method, user, varargin{:} ), users );
-	p = cell2mat( Utils.mycellfun( @(results) results.precisions, all_results ) );
-	r = cell2mat( Utils.mycellfun( @(results) results.recalls, all_results ) );
-	j = cell2mat( Utils.mycellfun( @(results) results.jaccards, all_results ) );
 end
 
 
