@@ -27,8 +27,7 @@ methods (Static)
 
 function mask = fgMask ( outline, mask_size )
 % Generate a logical mask with true inside the outline area.
-	polygon = transpose( outline );
-	mask = poly2mask( polygon(1,:), polygon(2,:), mask_size(1), mask_size(2) );
+	mask = poly2mask( outline(:,1), outline(:,2), mask_size(1), mask_size(2) );
 end
 
 
