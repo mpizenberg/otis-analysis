@@ -26,9 +26,12 @@ end
 function mask = fgMaskSP ( visible_scribbles, superpixels )
 % Generate a logical mask with true for foreground scribbles points.
 % Extend with superpixels.
-	[ ~, fg_scribbles ] = Resources.Scribbles.split( visible_scribbles );
-	scribbles = round( fg_scribbles );
-	[ sp_ids, ~ ] = SP.fromSub( superpixels, scribbles(:,2), scribbles(:,1) );
+	[ bg_scribbles, fg_scribbles ] = Resources.Scribbles.split( visible_scribbles );
+	bg_scrib = round( bg_scribbles );
+	fg_scrib = round( fg_scribbles );
+	[ bg_sp_ids, ~ ] = SP.fromSub( superpixels, bg_scrib(:,2), bg_scrib(:,1) );
+	[ fg_sp_ids, ~ ] = SP.fromSub( superpixels, fg_scrib(:,2), fg_scrib(:,1) );
+	sp_ids = setdiff( fg_sp_ids, bg_sp_ids );
 	mask = SP.toMask( superpixels, sp_ids );
 end
 
