@@ -9,6 +9,7 @@ function annotations = orderedOutlines ( user )
 	nb_img = length( img_order );
 	annotations = cell( 1, nb_img );
 	for i = 1:nb_img
+		% Should I use Outline.regularize here ?
 		annotations{i} = user.data.outline{ img_order(i) }.annotations{1};
 	end
 end
