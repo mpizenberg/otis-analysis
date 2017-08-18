@@ -1,4 +1,4 @@
-classdef (Abstract) Segmentation
+classdef (Abstract) Superpixels
 
 
 methods (Static)
@@ -20,13 +20,13 @@ end
 
 function [ visualization ] = parula ( superpixels )
 	nb_sp = max( superpixels(:) );
-	visualization = View.Segmentation.colors( superpixels, parula( nb_sp ) );
+	visualization = View.Superpixels.colors( superpixels, parula( nb_sp ) );
 end
 
 
 function [ visualization ] = means ( superpixels, img )
 	[ sp_means, ~ ] = SP.appearance( img, superpixels, 1 );
-	visualization = uint8( View.Segmentation.colors( superpixels, sp_means' ) );
+	visualization = uint8( View.Superpixels.colors( superpixels, sp_means' ) );
 end
 
 
