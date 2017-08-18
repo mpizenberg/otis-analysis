@@ -72,6 +72,7 @@ function duration ( users, file_path )
 	fig_size = [ 600, 200 ];
 	fig_handle = Paper.Plots.box( quantiles, labels, x_label, x_axis, fig_size );
 	Paper.Plots.savePdf( fig_handle, file_path );
+	close all;
 end
 
 
@@ -99,21 +100,58 @@ function errors ( users, file_path )
 	fig_size = [ 600, 200 ];
 	fig_handle = Paper.Plots.box( quantiles, labels, x_label, x_axis, fig_size );
 	Paper.Plots.savePdf( fig_handle, file_path );
+	close all;
 end
 
 
-function precisionBG ( users, file_path )
-% Plot Figure 12.
-	precision_rectangle = ...
-	precision_outline = ...
-	precision_scribbles = ...
-	quantiles = ...
+function results = evalMethod ( method, varargin )
+	results = struct;
+	[ results.precisions, results.recalls, results.jaccards ] = method( varargin{:} );
+end
+
+function [ p, r, j ] = evalAllUsers ( users, method, varargin )
+	all_results = Utils.mycellfun ...
+		( @(user) Paper.Plots.evalMethod( method, user, varargin{:} ), users );
+	p = cell2mat( Utils.mycellfun( @(results) results.precisions, all_results ) );
+	r = cell2mat( Utils.mycellfun( @(results) results.recalls, all_results ) );
+	j = cell2mat( Utils.mycellfun( @(results) results.jaccards, all_results ) );
+end
+
+
+function background ( users, all_gts, all_sp, file_path_precision, file_path_recall )
+% Plot Figure 12 and 13 (background user input).
+	[ precisions_rect, recalls_rect, ~ ] = Paper.Plots.evalAllUsers ...
+		( users, @User.Eval.Rectangle.bg, all_gts.rectangle );
+	[ precisions_outlines, recalls_outlines, ~ ] = Paper.Plots.evalAllUsers ...
+		( users, @User.Eval.Outline.bg, all_gts.outline );
+	[ precisions_scribbles, recalls_scribbles, ~ ] = Paper.Plots.evalAllUsers ...
+		( users, @User.Eval.Scribbles.bgSP, all_gts.scribbles, all_sp.scribbles );
+
+	% Figure 12 (precision).
+	quantiles = Utils.mycellfun ...
+		( @(values) quantile( values, linspace( 0, 1, 5 ) ) ...
+		, { precisions_scribbles, precisions_rect, precisions_outlines } ...
+		);
 	labels = { 'Scribbles with superpixels', 'Bounding box', 'Outline' };
 	x_label = 'Precision of background user input';
 	x_axis = [ 0.6, 1 ];
 	fig_size = [ 600, 200 ];
 	fig_handle = Paper.Plots.box( quantiles, labels, x_label, x_axis, fig_size );
-	Paper.Plots.savePdf( fig_handle, file_path );
+	Paper.Plots.savePdf( fig_handle, file_path_precision );
+	close all;
+
+	% Figure 13 (recall).
+	quantiles = Utils.mycellfun ...
+		( @(values) quantile( values, linspace( 0, 1, 5 ) ) ...
+		, { recalls_scribbles, recalls_rect, recalls_outlines } ...
+		);
+	labels = { 'Scribbles with superpixels', 'Bounding box', 'Outline' };
+	x_label = 'Recall of background user input';
+	x_axis = [ 0, 1 ];
+	fig_size = [ 600, 200 ];
+	fig_handle = Paper.Plots.box( quantiles, labels, x_label, x_axis, fig_size );
+	Paper.Plots.savePdf( fig_handle, file_path_recall );
+	close all;
 end
 
 
