@@ -6,7 +6,7 @@ function main ( resources_dir, users_annotations_dir, save_results_dir )
 % Load the users annotations.
 disp( 'Loading users annotations ...' );
 [ ~, json_file_paths ] = Utils.getFiles( users_annotations_dir, 'json' );
-users = Utils.mycellfun( @loadjson, json_file_paths );
+users = Utils.mycellfun( @Utils.loadjson, json_file_paths );
 
 
 

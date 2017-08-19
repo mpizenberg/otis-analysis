@@ -10,3 +10,6 @@
 [submodule "results/superpixels"]
 	path = results/superpixels
 	url = https://github.com/mpizenberg/otis-saved-superpixels.git
+[submodule "+Utils/jsonlab"]
+	path = +Utils/jsonlab
+	url = https://github.com/fangq/jsonlab.git
