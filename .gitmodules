@@ -7,3 +7,6 @@
 [submodule "+SP/+MeanShift/meanshift_edison_matlab_interface"]
 	path = +SP/+MeanShift/meanshift_edison_matlab_interface
 	url = https://github.com/mpizenberg/meanshift_edison_matlab_interface.git
+[submodule "results/superpixels"]
+	path = results/superpixels
+	url = https://github.com/mpizenberg/otis-saved-superpixels.git
