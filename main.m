@@ -85,6 +85,20 @@ Paper.Plots.foreground( users, all_gts, all_sp, fig_14_path, fig_15_path ); upd(
 
 
 
+% Generate the poster-specific plots.
+disp( 'Generating poster plots ...' );
+poster_dir = fullfile( paper_dir, 'poster' );
+Utils.mkParentDir( fullfile( poster_dir, 'whatever' ) );
+
+poster_duration_path = fullfile( poster_dir, 'duration.pdf' );
+poster_errors_path = fullfile( poster_dir, 'errors.pdf' );
+
+upd = Utils.textProgressBar( 2, 'updatestep', 1 ); % progress bar
+Paper.Plots.durationPoster( users, poster_duration_path ); upd(1);
+Paper.Plots.errorsPoster( users, poster_errors_path ); upd(2);
+
+
+
 % save % to inspect all variables a posteriori.
 
 
