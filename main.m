@@ -92,14 +92,18 @@ Utils.mkParentDir( fullfile( poster_dir, 'whatever' ) );
 
 poster_duration_path = fullfile( poster_dir, 'duration.pdf' );
 poster_errors_path = fullfile( poster_dir, 'errors.pdf' );
+poster_bg_path = fullfile( poster_dir, 'bg.pdf' );
+poster_fg_path = fullfile( poster_dir, 'fg.pdf' );
 
-upd = Utils.textProgressBar( 2, 'updatestep', 1 ); % progress bar
+upd = Utils.textProgressBar( 4, 'updatestep', 1 ); % progress bar
 Paper.Plots.durationPoster( users, poster_duration_path ); upd(1);
 Paper.Plots.errorsPoster( users, poster_errors_path ); upd(2);
+Paper.Plots.bgPoster( users, all_gts, all_sp, poster_bg_path ); upd(3);
+Paper.Plots.fgPoster( users, all_gts, all_sp, poster_fg_path ); upd(4);
 
 
 
-% save % to inspect all variables a posteriori.
+save % to inspect all variables a posteriori.
 
 
 
