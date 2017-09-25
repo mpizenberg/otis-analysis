@@ -7,7 +7,7 @@ function main ( resources_dir, users_annotations_dir, save_results_dir )
 disp( 'Loading users annotations ...' );
 [ ~, json_file_paths ] = Utils.getFiles( users_annotations_dir, 'json' );
 users = Utils.mycellfun( @Utils.loadjson, json_file_paths );
-
+user_ids = [ 300:317, 319:320 ];
 
 
 % Load ground truths.
@@ -26,6 +26,12 @@ img_paths.outline = imgPaths( @Resources.Outline.imgPath );
 img_paths.scribbles = imgPaths( @Resources.Scribbles.imgPath );
 
 
+% Get the images from the file paths
+images.outline = arrayfun(@(k) imread(img_paths.outline{k}), 1:11, 'UniformOutput', false );
+images.rectangle = arrayfun(@(k) imread(img_paths.rectangle{k}), 1:11, 'UniformOutput', false );
+images.scribbles = arrayfun(@(k) imread(img_paths.scribbles{k}), 1:11, 'UniformOutput', false );
+
+
 
 % Load / Compute the superpixels.
 disp( 'Loading / computing superpixels of each group of images ...' );
@@ -34,6 +40,12 @@ all_sp = struct;
 all_sp.rectangle = SP.MeanShift.all( img_paths.rectangle, sp_dir );
 all_sp.outline = SP.MeanShift.all( img_paths.outline, sp_dir );
 all_sp.scribbles = SP.MeanShift.all( img_paths.scribbles, sp_dir );
+
+
+
+%%%%% TO BE MOVED TO ITS PROPER PLACE
+% Compute the Segmentations
+Paper.Plots.segmentation(users, images, all_gts, all_sp, './');
 
 
 

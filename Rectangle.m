@@ -17,6 +17,24 @@ function mask = bgMask ( rect, mask_size )
 end
 
 
+function [mask, time_gc, nIter] = grabcut ( image, rect, superpixels)
+% Compute the segmentation mask obtained with GrabCut
+    
+	mask_size = size( superpixels );
+    fixed_bg = Rectangle.bgMask ( rect, mask_size );
+    fixed_fg = [];
+    
+    imd = double(image);
+    [Beta, k, G, maxIter, diffThreshold] = GrabCut.grabcutParameters;
+    
+    % Call GrabCut (measure time and the number of iterations)
+    tic
+    [L,nIter] = GrabCut.GCAlgo(imd, fixed_bg, fixed_fg, k,G,maxIter, Beta, diffThreshold, []);
+    time_gc = toc;
+    mask = double(1-L);
+        
+end
+
 end % methods
 
 

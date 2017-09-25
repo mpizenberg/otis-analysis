@@ -52,6 +52,16 @@ function [ precisions, recalls, jaccards ] = fgSP ( user, groundtruths, superpix
 end
 
 
+function [ precisions, recalls, jaccards ] = grabcut ( images, user, groundtruths, superpixels, method )
+	visible_scribbles = User.Eval.Scribbles.orderedVisibleScribbles( user );
+
+    methods = repmat( mat2cell( method, 1 ), 1, length( images ) );
+    
+	[ precisions, recalls, jaccards ] = User.Eval.method ...
+		( groundtruths, @Scribbles.grabcut, images, visible_scribbles,  superpixels, methods );
+end
+
+
 end % methods
 
 
