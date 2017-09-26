@@ -39,7 +39,6 @@ end
 
 function [ precisions, recalls, jaccards ] = grabcut ( images, user, groundtruths, all_sp )
 	rectangles = User.Eval.Rectangle.orderedRectangles( user );
-        
 	[ precisions, recalls, jaccards ] = User.Eval.method ...
 		( groundtruths, @Rectangle.grabcut, images, rectangles,  all_sp );
 end

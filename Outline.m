@@ -179,23 +179,23 @@ end
 
 function [mask, time_gc, nIter] = grabcut ( image, outline, radius_threshold, superpixels, method, constraint)
 % Compute the segmentation mask of an outline obtained with GrabCut
-    
+
 	mask_size = size( superpixels );
-    fixed_bg = Outline.bgMask ( outline, mask_size );
-    if strcmp(method,'skeleton')
-        fixed_fg = Outline.skeletonSP ( outline, radius_threshold, superpixels );
-    elseif strcmp(method,'erosion')
-        fixed_fg = Outline.fgErodedSP ( outline, radius_threshold, superpixels ); 
-    end
-    
-    imd = double(image);
-    [Beta, k, G, maxIter, diffThreshold] = GrabCut.grabcutParameters;
-    % Call GrabCut (measure time and the number of iterations)
-    tic
-    [L,nIter] = GrabCut.GCAlgo(imd, fixed_bg, fixed_fg, k,G,maxIter, Beta, diffThreshold, [], constraint);
-    time_gc = toc;
-    mask = double(1-L);
-    
+	fixed_bg = Outline.bgMask ( outline, mask_size );
+	if strcmp(method,'skeleton')
+		fixed_fg = Outline.skeletonSP ( outline, radius_threshold, superpixels );
+	elseif strcmp(method,'erosion')
+		fixed_fg = Outline.fgErodedSP ( outline, radius_threshold, superpixels );
+	end
+
+	imd = double(image);
+	[Beta, k, G, maxIter, diffThreshold] = GrabCut.grabcutParameters;
+	% Call GrabCut (measure time and the number of iterations)
+	tic
+	[L,nIter] = GrabCut.GCAlgo(imd, fixed_bg, fixed_fg, k,G,maxIter, Beta, diffThreshold, [], constraint);
+	time_gc = toc;
+	mask = double(1-L);
+
 end
 
 

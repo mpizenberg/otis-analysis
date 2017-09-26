@@ -7,7 +7,7 @@ function main ( resources_dir, users_annotations_dir, save_results_dir )
 disp( 'Loading users annotations ...' );
 [ ~, json_file_paths ] = Utils.getFiles( users_annotations_dir, 'json' );
 users = Utils.mycellfun( @Utils.loadjson, json_file_paths );
-user_ids = [ 300:317, 319:320 ];
+
 
 
 % Load ground truths.
@@ -24,6 +24,7 @@ imgPaths = @(f) arrayfun( @(id) f( resources_dir, categories, id ), (1:length(ca
 img_paths.rectangle = imgPaths( @Resources.Rectangle.imgPath );
 img_paths.outline = imgPaths( @Resources.Outline.imgPath );
 img_paths.scribbles = imgPaths( @Resources.Scribbles.imgPath );
+
 
 
 % Get the images from the file paths
