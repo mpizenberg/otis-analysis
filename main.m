@@ -27,10 +27,11 @@ img_paths.scribbles = imgPaths( @Resources.Scribbles.imgPath );
 
 
 
-% Get the images from the file paths
-images.outline = arrayfun(@(k) imread(img_paths.outline{k}), 1:11, 'UniformOutput', false );
-images.rectangle = arrayfun(@(k) imread(img_paths.rectangle{k}), 1:11, 'UniformOutput', false );
-images.scribbles = arrayfun(@(k) imread(img_paths.scribbles{k}), 1:11, 'UniformOutput', false );
+% Load all images.
+disp( 'Loading all images ...' );
+images.outline = Resources.Outline.allImgs( resources_dir, categories );
+images.rectangle = Resources.Rectangle.allImgs( resources_dir, categories );
+images.scribbles = Resources.Scribbles.allImgs( resources_dir, categories );
 
 
 
@@ -41,12 +42,6 @@ all_sp = struct;
 all_sp.rectangle = SP.MeanShift.all( img_paths.rectangle, sp_dir );
 all_sp.outline = SP.MeanShift.all( img_paths.outline, sp_dir );
 all_sp.scribbles = SP.MeanShift.all( img_paths.scribbles, sp_dir );
-
-
-
-%%%%% TO BE MOVED TO ITS PROPER PLACE
-% Compute the Segmentations
-Paper.Plots.segmentation(users, images, all_gts, all_sp, './');
 
 
 
@@ -89,13 +84,14 @@ fig_12_path = fullfile( plots_dir, '12.pdf' );
 fig_13_path = fullfile( plots_dir, '13.pdf' );
 fig_14_path = fullfile( plots_dir, '14.pdf' );
 fig_15_path = fullfile( plots_dir, '15.pdf' );
+fig_16_path = fullfile( plots_dir, '16.pdf' );
 
 upd = Utils.textProgressBar( 6, 'updatestep', 1 ); % progress bar
 Paper.Plots.duration( users, fig_10_path ); upd(1);
 Paper.Plots.errors( users, fig_11_path ); upd(2);
 Paper.Plots.background( users, all_gts, all_sp, fig_12_path, fig_13_path ); upd(4);
 Paper.Plots.foreground( users, all_gts, all_sp, fig_14_path, fig_15_path ); upd(6);
-
+Paper.Plots.segmentation( users, images, all_gts, all_sp, fig_16_path );
 
 
 % Generate the poster-specific plots.

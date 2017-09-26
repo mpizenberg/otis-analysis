@@ -37,9 +37,9 @@ function [ precisions, recalls, jaccards ] = fg ( user, groundtruths )
 end
 
 
-function [ precisions, recalls, jaccards ] = grabcut ( user, images, groundtruths, all_sp )
+function [ precisions, recalls, jaccards, masks ] = grabcut ( user, images, groundtruths, all_sp )
 	rectangles = User.Eval.Rectangle.orderedRectangles( user );
-	[ precisions, recalls, jaccards ] = User.Eval.method ...
+	[ precisions, recalls, jaccards, masks ] = User.Eval.method ...
 		( groundtruths, @Rectangle.grabcut, images, rectangles,  all_sp );
 end
 

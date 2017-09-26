@@ -78,7 +78,7 @@ function [ precisions, recalls, jaccards ] = erosionSP ( user, groundtruths, all
 end
 
 
-function [ precisions, recalls, jaccards ] = grabcut ( user, images, groundtruths, all_sp, method, constraint )
+function [ precisions, recalls, jaccards, masks ] = grabcut ( user, images, groundtruths, all_sp, method, constraint )
 	outlines = User.Eval.Outline.orderedOutlines( user );
 	gs_id = 1;
 	if strcmp(method,'erosion')
@@ -92,7 +92,7 @@ function [ precisions, recalls, jaccards ] = grabcut ( user, images, groundtruth
 	methods = repmat( { method }, 1, length( outlines ) );
 	constraints = repmat( { constraint }, 1, length( outlines ) );
 
-	[ precisions, recalls, jaccards ] = User.Eval.method ...
+	[ precisions, recalls, jaccards, masks ] = User.Eval.method ...
 		( groundtruths, @Outline.grabcut, images, outlines, radius_thresholds, all_sp, methods, constraints );
 end
 
