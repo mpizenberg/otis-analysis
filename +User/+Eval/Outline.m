@@ -78,7 +78,7 @@ function [ precisions, recalls, jaccards ] = erosionSP ( user, groundtruths, all
 end
 
 
-function [ precisions, recalls, jaccards ] = grabcut ( images, user, groundtruths, all_sp, method, constraint )
+function [ precisions, recalls, jaccards ] = grabcut ( user, images, groundtruths, all_sp, method, constraint )
 	outlines = User.Eval.Outline.orderedOutlines( user );
 	gs_id = 1;
 	if strcmp(method,'erosion')
@@ -86,7 +86,7 @@ function [ precisions, recalls, jaccards ] = grabcut ( images, user, groundtruth
 		radius_thresholds = num2cell( repmat( round( gs_radius ), 1, length( outlines ) ) );
 	elseif strcmp(method,'skeleton')
 		radius_thresholds = Utils.mycellfun ...
-		( @(outline) 0.5*Outline.maxRadius( outline ), outlines );
+			( @(outline) 0.5*Outline.maxRadius( outline ), outlines );
 	end
 
 	methods = repmat( mat2cell( method, 1 ), 1, length( outlines ) );
