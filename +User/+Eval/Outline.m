@@ -89,8 +89,8 @@ function [ precisions, recalls, jaccards ] = grabcut ( user, images, groundtruth
 			( @(outline) 0.5*Outline.maxRadius( outline ), outlines );
 	end
 
-	methods = repmat( mat2cell( method, 1 ), 1, length( outlines ) );
-	constraints = repmat( mat2cell( constraint, 1 ), 1, length( outlines ) );
+	methods = repmat( { method }, 1, length( outlines ) );
+	constraints = repmat( { constraint }, 1, length( outlines ) );
 
 	[ precisions, recalls, jaccards ] = User.Eval.method ...
 		( groundtruths, @Outline.grabcut, images, outlines, radius_thresholds, all_sp, methods, constraints );
