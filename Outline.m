@@ -194,7 +194,7 @@ function [mask, time_gc, nIter] = grabcut ( image, outline, radius_threshold, su
 	tic
 	[L,nIter] = GrabCut.GCAlgo(imd, fixed_bg, fixed_fg, k,G,maxIter, Beta, diffThreshold, [], constraint);
 	time_gc = toc;
-	mask = double(1-L);
+	mask = logical(1-L);
 
 end
 

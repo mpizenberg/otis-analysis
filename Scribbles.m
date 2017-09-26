@@ -48,7 +48,6 @@ end
 
 function [mask, time_gc, nIter] = grabcut ( image, visible_scribbles, superpixels, constraint)
 % Compute the segmentation mask obtained with GrabCut
-	mask_size = size( superpixels );
 	fixed_bg = Scribbles.bgMaskSP ( visible_scribbles, superpixels );
 	fixed_fg = Scribbles.fgMaskSP ( visible_scribbles, superpixels );
 
@@ -59,7 +58,7 @@ function [mask, time_gc, nIter] = grabcut ( image, visible_scribbles, superpixel
 	tic
 	[L,nIter] = GrabCut.GCAlgo(imd, fixed_bg, fixed_fg, k,G,maxIter, Beta, diffThreshold, [], constraint);
 	time_gc = toc;
-	mask = double(1-L);
+	mask = logical(1-L);
 
 end
 

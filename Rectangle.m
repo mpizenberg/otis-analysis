@@ -31,7 +31,7 @@ function [mask, time_gc, nIter] = grabcut ( image, rect, superpixels)
 	tic
 	[L,nIter] = GrabCut.GCAlgo(imd, fixed_bg, fixed_fg, k,G,maxIter, Beta, diffThreshold, []);
 	time_gc = toc;
-	mask = double(1-L);
+	mask = logical(1-L);
 
 end
 
