@@ -13,3 +13,6 @@
 [submodule "+Utils/jsonlab"]
 	path = +Utils/jsonlab
 	url = https://github.com/fangq/jsonlab.git
+[submodule "+GrabCut"]
+	path = +GrabCut
+	url = https://github.com/mpizenberg/otis-grabcut.git
