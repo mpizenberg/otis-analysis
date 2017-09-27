@@ -6,7 +6,8 @@ function main ( resources_dir, users_annotations_dir, save_results_dir )
 % Load the users annotations.
 disp( 'Loading users annotations ...' );
 [ ~, json_file_paths ] = Utils.getFiles( users_annotations_dir, 'json' );
-users = Utils.mycellfun( @Utils.loadjson, json_file_paths );
+users = Utils.cached( fullfile( save_results_dir, 'all_annotations.mat' ) ...
+	, @Utils.mycellfun, @Utils.loadjson, json_file_paths );
 
 
 
@@ -112,7 +113,7 @@ Paper.Plots.fgPoster( users, all_gts, all_sp, poster_fg_path ); upd(4);
 
 
 
-save % to inspect all variables a posteriori.
+% save; % to inspect all variables a posteriori.
 
 
 
