@@ -4,10 +4,10 @@ classdef (Abstract) Superpixels
 methods (Static)
 
 
-function [ visualization ] = boundaries ( superpixels )
+function [ mask ] = boundaries ( superpixels )
 	gx = logical( superpixels - superpixels( :, [2:end, end] ) );
 	gy = logical( superpixels - superpixels( [2:end, end], : ) );
-	visualization = gx | gy;
+	mask = gx | gy;
 end
 
 
