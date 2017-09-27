@@ -385,6 +385,23 @@ function fgPoster ( users, all_gts, all_sp, file_path_precision )
 end
 
 
+function saveAllUsersMasks( all_masks, save_dir, base_name )
+% Save masks on disk, grouped in one folder per user.
+	saveUserIdMasks = @(user_id) ...
+		( Paper.Plots.saveUserMasks ...
+			( all_masks{user_id} ...
+			, fullfile( save_dir, ['user_' int2str(user_id)] ) ...
+			, base_name ) );
+	arrayfun( saveUserIdMasks, 1:length(all_masks), 'UniformOutput', false );
+end
+
+function saveUserMasks( masks, user_dir, base_name )
+	saveMask = @(id) imwrite( masks{id}, fullfile( user_dir, [ base_name '_' int2str(id) '.png' ] ) );
+	Utils.mkParentDir( fullfile( user_dir, 'whatever' ) );
+	arrayfun( saveMask, 1:length(masks), 'UniformOutput', false );
+end
+
+
 function segmentation ( users, images, all_gts, all_sp, file_path )
 % Plot Figure 16.
 	cache_dir = fullfile( fileparts( file_path ), 'cache' );
@@ -394,12 +411,14 @@ function segmentation ( users, images, all_gts, all_sp, file_path )
 		Utils.cached( fullfile( cache_dir, 'seg_scr.mat' ) ...
 			, @Paper.Plots.evalAllUsers ...
 			, users, @User.Eval.Scribbles.grabcut, images.scribbles, all_gts.scribbles, all_sp.scribbles, 'soft' );
+	Paper.Plots.saveAllUsersMasks( masks_scrib, fullfile( cache_dir, 'masks_png' ), 'scribbles' );
 
 	disp( 'Computing GrabCut for bounding boxes ...' );
 	[ ~, ~, jaccards_rect, masks_rect ] = ...
 		Utils.cached( fullfile( cache_dir, 'seg_rec.mat' ) ...
 			, @Paper.Plots.evalAllUsers ...
 			, users, @User.Eval.Rectangle.grabcut, images.rectangle, all_gts.rectangle, all_sp.rectangle );
+	Paper.Plots.saveAllUsersMasks( masks_rect, fullfile( cache_dir, 'masks_png' ), 'bbox' );
 
 	save;
 	return;
