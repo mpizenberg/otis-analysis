@@ -186,15 +186,26 @@ function [mask, time_gc, nIter] = grabcut ( image, outline, radius_threshold, su
 		fixed_fg = Outline.skeletonSP ( outline, radius_threshold, superpixels );
 	elseif strcmp(method,'erosion')
 		fixed_fg = Outline.fgErodedSP ( outline, radius_threshold, superpixels );
+	elseif strcmp(method, 'none')
+		fixed_fg = [];
+		constraint = 'none';
 	end
 
-	imd = double(image);
-	[Beta, k, G, maxIter, diffThreshold] = GrabCut.grabcutParameters;
-	% Call GrabCut (measure time and the number of iterations)
-	tic
-	[L,nIter] = GrabCut.GCAlgo(imd, fixed_bg, fixed_fg, k,G,maxIter, Beta, diffThreshold, [], constraint);
-	time_gc = toc;
-	mask = logical(1-L);
+	bg_constraint.type = 'hard';
+	bg_constraint.mask = fixed_bg;
+	fg_constraint.type = constraint;
+	fg_constraint.mask = fixed_fg;
+
+	t_start = tic;
+	[ mask, nIter ] = GrabCut.segment( image, bg_constraint, fg_constraint );
+
+	% Relaunch without FG initialization if it caused FG to collapse.
+	if ~strcmp(constraint, 'none') && ~any( mask(:) )
+		disp( 'FG collapsed, relaunching without FG initialization' );
+		fg_constraint.type = 'none';
+		[ mask, nIter ] = GrabCut.segment( imd, bg_constraint, fg_constraint );
+	end
+	time_gc = (tic - t_start) / 1e6;
 
 end
 

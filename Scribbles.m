@@ -46,19 +46,17 @@ function mask = bgMaskSP ( visible_scribbles, superpixels )
 end
 
 
-function [mask, time_gc, nIter] = grabcut ( image, visible_scribbles, superpixels, constraint)
+function [ mask, time_gc, nb_iter ] = grabcut ( image, visible_scribbles, superpixels, constraint )
 % Compute the segmentation mask obtained with GrabCut
-	fixed_bg = Scribbles.bgMaskSP ( visible_scribbles, superpixels );
-	fixed_fg = Scribbles.fgMaskSP ( visible_scribbles, superpixels );
-
-	imd = double(image);
-	[Beta, k, G, maxIter, diffThreshold] = GrabCut.grabcutParameters;
+	bg_constraint.type = 'hard';
+	bg_constraint.mask = Scribbles.bgMaskSP ( visible_scribbles, superpixels );
+	fg_constraint.type = constraint;
+	fg_constraint.mask = Scribbles.fgMaskSP ( visible_scribbles, superpixels );
 
 	% Call GrabCut (measure time and the number of iterations)
-	tic
-	[L,nIter] = GrabCut.GCAlgo(imd, fixed_bg, fixed_fg, k,G,maxIter, Beta, diffThreshold, [], constraint);
-	time_gc = toc;
-	mask = logical(1-L);
+	start_time = tic;
+	[ mask, nb_iter ] = GrabCut.segment( image, bg_constraint, fg_constraint );
+	time_gc = tic - start_time;
 
 end
 
