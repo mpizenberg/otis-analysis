@@ -20,34 +20,34 @@ end % private methods
 methods (Static)
 
 
-function [ precisions, recalls, jaccards ] = bg ( user, groundtruths )
+function [ precisions, recalls, jaccards, masks ] = bg ( user, groundtruths )
 	inv_gts = Utils.mycellfun( @(gt) ~gt, groundtruths );
 	visible_scribbles = User.Eval.Scribbles.orderedVisibleScribbles( user );
 	gt_sizes = Utils.mycellfun( @size, groundtruths );
-	[ precisions, recalls, jaccards ] = User.Eval.method ...
+	[ precisions, recalls, jaccards, masks ] = User.Eval.method ...
 		( inv_gts, @Scribbles.bgMask, visible_scribbles, gt_sizes );
 end
 
 
-function [ precisions, recalls, jaccards ] = fg ( user, groundtruths )
+function [ precisions, recalls, jaccards, masks ] = fg ( user, groundtruths )
 	visible_scribbles = User.Eval.Scribbles.orderedVisibleScribbles( user );
 	gt_sizes = Utils.mycellfun( @size, groundtruths );
-	[ precisions, recalls, jaccards ] = User.Eval.method ...
+	[ precisions, recalls, jaccards, masks ] = User.Eval.method ...
 		( groundtruths, @Scribbles.fgMask, visible_scribbles, gt_sizes );
 end
 
 
-function [ precisions, recalls, jaccards ] = bgSP ( user, groundtruths, superpixels )
+function [ precisions, recalls, jaccards, masks ] = bgSP ( user, groundtruths, superpixels )
 	inv_gts = Utils.mycellfun( @(gt) ~gt, groundtruths );
 	visible_scribbles = User.Eval.Scribbles.orderedVisibleScribbles( user );
-	[ precisions, recalls, jaccards ] = User.Eval.method ...
+	[ precisions, recalls, jaccards, masks ] = User.Eval.method ...
 		( inv_gts, @Scribbles.bgMaskSP, visible_scribbles, superpixels );
 end
 
 
-function [ precisions, recalls, jaccards ] = fgSP ( user, groundtruths, superpixels )
+function [ precisions, recalls, jaccards, masks ] = fgSP ( user, groundtruths, superpixels )
 	visible_scribbles = User.Eval.Scribbles.orderedVisibleScribbles( user );
-	[ precisions, recalls, jaccards ] = User.Eval.method ...
+	[ precisions, recalls, jaccards, masks ] = User.Eval.method ...
 		( groundtruths, @Scribbles.fgMaskSP, visible_scribbles, superpixels );
 end
 

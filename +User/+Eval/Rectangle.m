@@ -1,7 +1,7 @@
 classdef (Abstract) Rectangle
 
 
-methods (Static, Access=private)
+methods (Static)
 
 
 function annotations = orderedRectangles ( user )
@@ -14,25 +14,19 @@ function annotations = orderedRectangles ( user )
 end
 
 
-end % private methods
-
-
-methods (Static)
-
-
-function [ precisions, recalls, jaccards ] = bg ( user, groundtruths )
+function [ precisions, recalls, jaccards, masks ] = bg ( user, groundtruths )
 	gts = Utils.mycellfun( @(gt) ~gt, groundtruths );
 	rectangles = User.Eval.Rectangle.orderedRectangles( user );
 	gt_sizes = Utils.mycellfun( @size, groundtruths );
-	[ precisions, recalls, jaccards ] = User.Eval.method ...
+	[ precisions, recalls, jaccards, masks ] = User.Eval.method ...
 		( gts, @Rectangle.bgMask, rectangles, gt_sizes );
 end
 
 
-function [ precisions, recalls, jaccards ] = fg ( user, groundtruths )
+function [ precisions, recalls, jaccards, masks ] = fg ( user, groundtruths )
 	rectangles = User.Eval.Rectangle.orderedRectangles( user );
 	gt_sizes = Utils.mycellfun( @size, groundtruths );
-	[ precisions, recalls, jaccards ] = User.Eval.method ...
+	[ precisions, recalls, jaccards, masks ] = User.Eval.method ...
 		( groundtruths, @Rectangle.fgMask, rectangles, gt_sizes );
 end
 
