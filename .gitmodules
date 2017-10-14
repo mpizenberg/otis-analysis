@@ -16,3 +16,6 @@
 [submodule "+GrabCut"]
 	path = +GrabCut
 	url = https://github.com/mpizenberg/otis-grabcut.git
+[submodule "users_annotations"]
+	path = users_annotations
+	url = https://github.com/mpizenberg/otis-users-annotations.git

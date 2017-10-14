@@ -1,5 +1,5 @@
 RESOURCES_DIR = ../api/resources
-ANNOTATIONS_DIR = ../users_annotations
+ANNOTATIONS_DIR = users_annotations
 RESULTS_DIR = results
 
 install :
